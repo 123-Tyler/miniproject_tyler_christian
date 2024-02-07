@@ -1,14 +1,12 @@
-Species,Long-term time period,Long-term percentage change (1970-2021),Long-term annual percentage change,"Long-term trend
-[note 1]",Short-term percentage change (2016-2021),Short-term annual percentage change,"Short-term trend
-[note 1]",Habitat
+species,long_term_time_period,long_term_percentage_change_(1970-2021),long_term_annual_percentage_change,long_term_trend,short_term_percentage_change_(2016-2021),short_term_annual_percentage_change,short_term_trend,habitat
 Greenfinch (Chloris chloris),na,-69,-2.24,weak decline,-32,-7.37,strong decline,Farmland generalist birds
 Jackdaw (Corvus monedula),na,163,1.91,weak increase,7,1.34,weak increase,Farmland generalist birds
 Kestrel (Falco tinnunculus),na,-54,-1.51,weak decline,-13,-2.77,strong decline,Farmland generalist birds
 Reed Bunting (Emberiza schoeniclus),na,-33,-0.78,little change,-7,-1.37,weak decline,Farmland generalist birds
 Rook (Corvus frugilegus),na,5,0.11,little change,0,0.06,little change,Farmland generalist birds
 Woodpigeon (Columba palumbus),na,116,1.52,weak increase,-2,-0.32,little change,Farmland generalist birds
-Yellow Wagtail (Motacilla flava),na,-66,-2.10,weak decline,6,1.12,little change,Farmland generalist birds
-Corn Bunting (Emberiza calandra),na,-86,-3.80,strong decline,28,5.12,strong increase,Farmland specialist birds
+Yellow Wagtail (Motacilla flava),na,-66,-2.1,weak decline,6,1.12,little change,Farmland generalist birds
+Corn Bunting (Emberiza calandra),na,-86,-3.8,strong decline,28,5.12,strong increase,Farmland specialist birds
 Goldfinch (Carduelis carduelis),na,195,2.14,weak increase,6,1.26,weak increase,Farmland specialist birds
 Grey Partridge (Perdix perdix),na,-92,-4.94,strong decline,-5,-0.95,little change,Farmland specialist birds
 Lapwing (Vanellus vanellus),na,-68,-2.21,weak decline,-12,-2.52,weak decline,Farmland specialist birds
@@ -30,15 +28,15 @@ Lesser Whitethroat (Sylvia curruca),na,13,0.24,little change,-7,-1.53,weak decli
 Long-tailed Tit (Aegithalos caudatus),na,90,1.27,weak increase,-6,-1.22,weak decline,Woodland generalist birds
 Robin (Erithacus rubecula),na,52,0.82,little change,-4,-0.88,little change,Woodland generalist birds
 Song Thrush (Turdus philomelos),na,-48,-1.26,weak decline,1,0.14,little change,Woodland generalist birds
-Tawny Owl (Strix aluco),na,-42,-1.06,little change,-9,-1.80,weak decline,Woodland generalist birds
+Tawny Owl (Strix aluco),na,-42,-1.06,little change,-9,-1.8,weak decline,Woodland generalist birds
 Wren (Troglodytes troglodytes),na,59,0.91,little change,-8,-1.65,weak decline,Woodland generalist birds
-Blackcap (Sylvia atricapilla),1970-2021,375,3.10,strong increase,21,3.91,strong increase,Woodland generalist birds
+Blackcap (Sylvia atricapilla),1970-2021,375,3.1,strong increase,21,3.91,strong increase,Woodland generalist birds
 Capercaillie (Tetrao urogallus),1970-2021,-95,-5.69,strong decline,-46,-11.54,strong decline,Woodland generalist birds
 Chiffchaff (Phylloscopus collybita),1970-2021,133,1.68,weak increase,10,1.85,weak increase,Woodland generalist birds
 Coal Tit (Periparus ater),1970-2021,15,0.27,little change,-3,-0.61,little change,Woodland generalist birds
 Common Crossbill (Loxia curvirostra),1995-2021,-23,-1.01,little change,-10,-2.02,weak decline,Woodland generalist birds
 Garden Warbler (Sylvia borin),1970-2021,-21,-0.45,little change,-9,-1.77,weak decline,Woodland generalist birds
-Goldcrest (Regulus regulus),1970-2021,-26,-0.60,little change,-18,-3.80,strong decline,Woodland generalist birds
+Goldcrest (Regulus regulus),1970-2021,-26,-0.6,little change,-18,-3.8,strong decline,Woodland generalist birds
 Great Spotted Woodpecker (Dendrocopos major),1970-2021,362,3.05,strong increase,4,0.69,little change,Woodland generalist birds
 Green Woodpecker (Picus viridis),1970-2021,56,0.88,little change,-20,-4.27,strong decline,Woodland generalist birds
 Jay (Garrulus glandarius),1970-2021,11,0.21,little change,2,0.49,little change,Woodland generalist birds
@@ -46,8 +44,8 @@ Lesser Redpoll (Carduelis cabaret),1970-2021,-88,-4.08,strong decline,-13,-2.73,
 Lesser Spotted Woodpecker (Dendrocopos minor),1970-2021,-93,-4.96,strong decline,-52,-13.72,strong decline,Woodland generalist birds
 Marsh Tit (Poecile palustris),1970-2021,-76,-2.76,strong decline,-1,-0.17,little change,Woodland generalist birds
 Nightingale (Luscinia megarhynchos),1995-2021,-46,-2.32,weak decline,19,3.51,strong increase,Woodland generalist birds
-Nuthatch (Sitta europaea),1970-2021,275,2.63,weak increase,5,0.90,little change,Woodland generalist birds
-Pied Flycatcher (Ficedula hypoleuca),1995-2021,-56,-3.09,strong decline,-22,-4.80,strong decline,Woodland generalist birds
+Nuthatch (Sitta europaea),1970-2021,275,2.63,weak increase,5,0.9,little change,Woodland generalist birds
+Pied Flycatcher (Ficedula hypoleuca),1995-2021,-56,-3.09,strong decline,-22,-4.8,strong decline,Woodland generalist birds
 Redstart (Phoenicurus phoenicurus),1970-2021,20,0.36,little change,-18,-3.97,strong decline,Woodland generalist birds
 Siskin (Carduelis spinus),1995-2021,31,1.06,little change,-11,-2.37,weak decline,Woodland generalist birds
 Sparrowhawk (Accipiter nisus),1970-2021,60,0.92,little change,-9,-1.93,weak decline,Woodland generalist birds
@@ -66,7 +64,7 @@ Reed Bunting (Emberiza schoeniclus),1975-2021,-69,-2.48,weak decline,-11,-2.19,w
 Reed Warbler (Acrocephalus scirpaceus),1981-2021,91,1.63,weak increase,3,0.55,little change,Reedbed birds
 Sedge Warbler (Acrocephalus schoenobaenus),1975-2021,-49,-1.45,weak decline,-5,-1.06,little change,Reedbed birds
 Coot (Fulica atra),1975-2021,33,0.63,little change,-18,-3.82,strong decline,Birds of slow and standing water
-Great Crested Grebe (Podiceps cristatus),1995-2021,-25,-1.13,little change,-19,-4.20,strong decline,Birds of slow and standing water
+Great Crested Grebe (Podiceps cristatus),1995-2021,-25,-1.13,little change,-19,-4.2,strong decline,Birds of slow and standing water
 Little Grebe (Tachybaptus ruficollis),1975-2021,-36,-0.96,little change,-15,-3.26,strong decline,Birds of slow and standing water
 Mallard (Anas platyrhynchos),1975-2021,189,2.33,weak increase,-4,-0.89,little change,Birds of slow and standing water
 Moorhen (Gallinula chloropus),1975-2021,-33,-0.87,little change,-2,-0.41,little change,Birds of slow and standing water
@@ -83,7 +81,7 @@ Grey Heron (Ardea cinerea),1975-2021,-24,-0.61,little change,-5,-1.12,little cha
 Kingfisher (Alcedo atthis),1975-2021,-19,-0.45,little change,0,-0.07,little change,Other water and wetland birds
 Oystercatcher (Haematopus ostralegus),1975-2021,59,1.01,little change,-4,-0.75,little change,Other water and wetland birds
 Sand Martin (Riparia riparia),1978-2021,59,1.08,little change,44,7.49,strong increase,Other water and wetland birds
-Arctic Skua (Stercorarius parasiticus),na,-80,-4.90,strong decline,14,2.67,weak increase,Seabirds
+Arctic Skua (Stercorarius parasiticus),na,-80,-4.9,strong decline,14,2.67,weak increase,Seabirds
 Black-legged kittiwake (Rissa tridactyla),na,-64,-3.15,strong decline,20,3.73,strong increase,Seabirds
 Common guillemot (Uria aalge),na,43,1.12,little change,13,2.38,weak increase,Seabirds
 European shag (Phalacrocorax artistotelis),na,-46,-1.88,weak decline,5,0.94,little change,Seabirds
@@ -91,7 +89,7 @@ Great Black-backed Gull (Larus marinus),na,-42,-1.68,weak decline,-32,-7.38,stro
 Great cormorant (Phalacrocorax carbo),na,-16,-0.56,little change,4,0.84,little change,Seabirds
 Herring Gull (Larus argentatus),na,-51,-2.19,weak decline,-4,-0.74,little change,Seabirds
 Northern fulmar (Fulmarus glacialis),na,-36,-1.39,weak decline,-10,-2.15,weak decline,Seabirds
-Common Tern (Sterna hirundo),na,-9,-0.30,little change,14,2.67,weak increase,Seabirds
+Common Tern (Sterna hirundo),na,-9,-0.3,little change,14,2.67,weak increase,Seabirds
 Sandwich Tern (Sterna sandvicensis),na,9,0.27,little change,26,4.76,strong increase,Seabirds
 Little Tern (Sternula albifrons),na,-35,-1.36,weak decline,-11,-2.33,weak decline,Seabirds
 Arctic Tern (Sterna paradisaea),na,12,0.34,little change,-9,-1.93,weak decline,Seabirds
@@ -109,7 +107,7 @@ Goosander (Mergus merganser),1975/1976-2020/2021,70,1.19,weak increase,8,1.53,we
 "Greylag Goose, British/Irish (Anser anser anser)",1975/1976-2020/2021,3640,8.38,strong increase,4,0.69,little change,Wildfowl birds
 "Greylag Goose, Icelandic (Anser anser)",1975/1976-2020/2021,27,0.53,little change,-11,-2.31,weak decline,Wildfowl birds
 Mallard (Anas platyrhynchos),1975/1976-2020/2021,-32,-0.86,little change,-14,-2.92,strong decline,Wildfowl birds
-Mute Swan (Cygnus olor),1975/1976-2020/2021,190,2.39,weak increase,2,0.40,little change,Wildfowl birds
+Mute Swan (Cygnus olor),1975/1976-2020/2021,190,2.39,weak increase,2,0.4,little change,Wildfowl birds
 Pink-footed Goose (Anser brachyrhynchus),1975/1976-2020/2021,516,4.12,strong increase,-2,-0.45,little change,Wildfowl birds
 Pintail (Anas acuta),1975/1976-2020/2021,-15,-0.35,little change,-4,-0.87,little change,Wildfowl birds
 Pochard (Aythya ferina),1975/1976-2020/2021,-60,-2.01,weak decline,-14,-3.02,strong decline,Wildfowl birds
@@ -120,24 +118,24 @@ Shoveler (Anas clypeata),1975/1976-2020/2021,141,1.97,weak increase,9,1.79,weak 
 Tufted Duck (Aythya fuligula),1975/1976-2020/2021,132,1.89,weak increase,-16,-3.53,strong decline,Wildfowl birds
 Teal (Anas crecca),1975/1976-2020/2021,48,0.88,little change,-9,-1.91,weak decline,Wildfowl birds
 "White-fronted Goose, European (Anser albifrons albifrons)",1975/1976-2020/2021,-70,-2.61,weak decline,-8,-1.69,weak decline,Wildfowl birds
-"White-fronted Goose, Greenland (Anser albifrons flavirostris)",1983/1984-2020/2021,41,0.93,little change,15,2.80,weak increase,Wildfowl birds
+"White-fronted Goose, Greenland (Anser albifrons flavirostris)",1983/1984-2020/2021,41,0.93,little change,15,2.8,weak increase,Wildfowl birds
 Whooper Swan (Cygnus cygnus),1975/1976-2020/2021,991,5.45,strong increase,28,5.04,strong increase,Wildfowl birds
 Wigeon (Anas penelope),1975/1976-2020/2021,97,1.52,weak increase,-15,-3.09,strong decline,Wildfowl birds
 Avocet (Recurvirostra avosetta),1989/1990-2020/2021,1137,8.45,strong increase,15,2.81,strong increase,Wading birds
-Black-tailed Godwit (Limosa limosa),1975/1976-2020/2021,-9,-0.21,little change,-23,-5.00,strong decline,Wading birds
+Black-tailed Godwit (Limosa limosa),1975/1976-2020/2021,-9,-0.21,little change,-23,-5,strong decline,Wading birds
 Bar-tailed Godwit (Limosa lapponica),1975/1976-2020/2021,872,5.18,strong increase,7,1.43,weak increase,Wading birds
 Curlew (Numenius arquata),1975/1976-2020/2021,-1,-0.02,little change,-11,-2.22,weak decline,Wading birds
 Dunlin (Calidris alpina),1975/1976-2020/2021,-48,-1.46,weak decline,-8,-1.72,weak decline,Wading birds
 Golden Plover (Pluvialis apricaria),1975/1976-2020/2021,149,2.05,weak increase,-15,-3.25,strong decline,Wading birds
 Grey Plover (Pluvialis squatarola),1975/1976-2020/2021,149,2.05,weak increase,-3,-0.57,little change,Wading birds
-Knot (calidris canutus),1975/1976-2020/2021,43,0.80,little change,10,1.85,weak increase,Wading birds
+Knot (calidris canutus),1975/1976-2020/2021,43,0.8,little change,10,1.85,weak increase,Wading birds
 Lapwing (Vanellus vanellus),1975/1976-2020/2021,53,0.95,little change,-18,-3.84,strong decline,Wading birds
 Oystercatcher (Haematopus ostralegus),1975/1976-2020/2021,0,0.01,little change,-6,-1.13,little change,Wading birds
-Purple Sandpiper (Calidris maritima),1975/1976-2020/2021,20,0.40,little change,-10,-2.12,weak decline,Wading birds
-Redshank (Tringa totanus),1975/1976-2020/2021,0,0.00,little change,-3,-0.53,little change,Wading birds
-Ringed Plover (Charadrius hiaticula),1975/1976-2020/2021,-39,-1.10,little change,-4,-0.75,little change,Wading birds
+Purple Sandpiper (Calidris maritima),1975/1976-2020/2021,20,0.4,little change,-10,-2.12,weak decline,Wading birds
+Redshank (Tringa totanus),1975/1976-2020/2021,0,0,little change,-3,-0.53,little change,Wading birds
+Ringed Plover (Charadrius hiaticula),1975/1976-2020/2021,-39,-1.1,little change,-4,-0.75,little change,Wading birds
 Sanderline (Calidris alba),1975/1976-2020/2021,73,1.23,weak increase,1,0.15,little change,Wading birds
-Turnstone (Arenaria interpres),1975/1976-2020/2021,31,0.60,little change,3,0.51,little change,Wading birds
+Turnstone (Arenaria interpres),1975/1976-2020/2021,31,0.6,little change,3,0.51,little change,Wading birds
 Coot (Fulica atra),1985/1986-2020/2021,-9,-0.27,little change,-15,-3.25,strong decline,Other wintering waterbirds
 Cormorant (Phalacrocorax carbo),1988/1989-2020/2021,93,2.07,weak increase,9,1.67,weak increase,Other wintering waterbirds
 Great crested grebe (Podiceps cristatus),1985/1986-2020/2021,24,0.61,little change,-7,-1.49,weak decline,Other wintering waterbirds
@@ -151,10 +149,10 @@ Oystercatcher (Haematopus ostralegus),na,-11,-0.41,little change,17,3.12,strong 
 Peregrine (Falco peregrinus),na,-83,-6.45,strong decline,-61,-17.24,strong decline,Upland generalist birds
 Pied Wagtail (Motacilla alba),na,-29,-1.24,weak decline,-22,-4.87,strong decline,Upland generalist birds
 Red Kite (Milvus milvus),na,392,6.08,strong increase,25,4.62,strong increase,Upland generalist birds
-Redshank (Tringa totanus),na,-57,-3.10,strong decline,-8,-1.66,weak decline,Upland generalist birds
+Redshank (Tringa totanus),na,-57,-3.1,strong decline,-8,-1.66,weak decline,Upland generalist birds
 Skylark (Alauda arvensis),na,-1,-0.06,little change,8,1.57,weak increase,Upland generalist birds
-Stonechat (Saxicola rubicola),na,264,4.90,strong increase,72,11.44,strong increase,Upland generalist birds
-Wren (Troglodytes troglodytes),na,38,1.20,weak increase,-12,-2.57,weak decline,Upland generalist birds
+Stonechat (Saxicola rubicola),na,264,4.9,strong increase,72,11.44,strong increase,Upland generalist birds
+Wren (Troglodytes troglodytes),na,38,1.2,weak increase,-12,-2.57,weak decline,Upland generalist birds
 Black Grouse (Tetrao tetrix),na,-25,-1.39,weak decline,na,na,na,Upland specalist birds
 Curlew (Numenius arquata),na,-35,-1.58,weak decline,6,1.09,little change,Upland specalist birds
 Dotterel (Charadrius morinellus),na,-50,-3.97,strong decline,na,na,na,Upland specalist birds
@@ -165,7 +163,7 @@ Meadow Pipit (Anthus pratensis),na,-11,-0.45,little change,-6,-1.19,weak decline
 Merlin (Falco columbarius),na,-13,-0.96,little change,na,na,na,Upland specalist birds
 Raven (Corvus corax),na,10,0.36,little change,3,0.67,little change,Upland specalist birds
 Red Grouse (Lagopus lagopus scotica),na,-3,-0.11,little change,-25,-5.69,strong decline,Upland specalist birds
-Ring Ouzel (Turdus torquatus),na,-29,-1.27,weak decline,-7,-1.40,weak decline,Upland specalist birds
+Ring Ouzel (Turdus torquatus),na,-29,-1.27,weak decline,-7,-1.4,weak decline,Upland specalist birds
 Snipe (Gallinago gallinago),na,31,1.01,little change,0,-0.04,little change,Upland specalist birds
 Twite (Carduelis flavirostris),na,-21,-1.71,weak decline,na,na,na,Upland specalist birds
 Wheatear (Oenanthe oenanthe),na,-22,-0.93,little change,5,1.01,little change,Upland specalist birds
@@ -175,19 +173,19 @@ Dipper (Cinclus cinclus),na,-21,-0.85,little change,-16,-3.52,strong decline,Upl
 Goosander (Mergus merganser),na,22,0.75,little change,-1,-0.15,little change,Upland riparian birds
 Grey Wagtail (Motacilla cinerea),na,1,0.05,little change,-4,-0.84,little change,Upland riparian birds
 Avocet (Recurvirostra avosetta),1990-2021,384,5.22,strong increase,2,0.49,little change,Additional species
-Bearded Tit (Panurus biarmicus),1977-2021,4,0.10,little change,-13,-2.74,strong decline,Additional species
+Bearded Tit (Panurus biarmicus),1977-2021,4,0.1,little change,-13,-2.74,strong decline,Additional species
 Black-headed Gull (Chroicocephalus ridibundus),1970-2021,21,0.37,little change,7,1.38,weak increase,Additional species
 Buzzard (Buteo buteo),1970-2021,482,3.52,strong increase,-2,-0.48,little change,Additional species
 Carrion Crow (Corvus corone),1970-2021,96,1.33,weak increase,-2,-0.35,little change,Additional species
 Cirl Bunting (Emberiza cirlus),2001-2021,113,3.84,strong increase,16,2.94,strong increase,Additional species
 Collared Dove (Streptopelia decaocto),1970-2021,626,3.96,strong increase,-16,-3.45,strong decline,Additional species
 Corncrake (Crex crex),1970-2021,-65,-2.03,weak decline,-17,-3.62,strong decline,Additional species
-Cuckoo (Cuculus canorus),1970-2021,-51,-1.40,weak decline,9,1.79,weak increase,Additional species
-Dartford Warbler (Sylvia undata),1975-2021,255,2.79,weak increase,18,3.30,strong increase,Additional species
+Cuckoo (Cuculus canorus),1970-2021,-51,-1.4,weak decline,9,1.79,weak increase,Additional species
+Dartford Warbler (Sylvia undata),1975-2021,255,2.79,weak increase,18,3.3,strong increase,Additional species
 Firecrest (Regulus ignicapilla),na,na,na,na,na,na,na,Additional species
-Gadwall (Anas strepera),1995-2021,217,4.53,strong increase,21,3.90,strong increase,Additional species
+Gadwall (Anas strepera),1995-2021,217,4.53,strong increase,21,3.9,strong increase,Additional species
 Golden Plover (Pluvialis apricaria),1995-2021,-16,-0.65,little change,-6,-1.21,weak decline,Additional species
-Greylag Goose (Anser anser),1993-2021,302,5.10,strong increase,13,2.46,weak increase,Additional species
+Greylag Goose (Anser anser),1993-2021,302,5.1,strong increase,13,2.46,weak increase,Additional species
 Hen Harrier (Circus cyaneus),1991-2021,-19,-0.71,little change,-15,-3.19,strong decline,Additional species
 Hobby (Falco subbuteo),1995-2021,-8,-0.31,little change,8,1.51,weak increase,Additional species
 Hooded Crow (Corvus cornix),1995-2021,8,0.31,little change,-2,-0.39,little change,Additional species
@@ -203,12 +201,12 @@ Pochard (Aythya ferina),1993-2021,59,1.66,weak increase,13,2.48,weak increase,Ad
 Quail (Coturnix coturnix),1990-2021,-12,-0.41,little change,69,11.02,strong increase,Additional species
 Raven (Corvus corax),1995-2021,33,1.12,little change,3,0.64,little change,Additional species
 Red Grouse (Lagopus lagopus scotica),1995-2021,-10,-0.39,little change,-25,-5.69,strong decline,Additional species
-Red Kite (Milvus milvus),2004-2021,604,12.17,strong increase,40,6.90,strong increase,Additional species
+Red Kite (Milvus milvus),2004-2021,604,12.17,strong increase,40,6.9,strong increase,Additional species
 Red-breasted Merganser (Mergus serrator),1970-2021,405,3.23,strong increase,-17,-3.55,strong decline,Additional species
 Shelduck (Tadorna tadorna),1995-2021,-6,-0.22,little change,1,0.29,little change,Additional species
-Shoveler (Anas clypeata),na,na,na,na,15,2.80,weak increase,Additional species
+Shoveler (Anas clypeata),na,na,na,na,15,2.8,weak increase,Additional species
 Stonechat (Saxicola rubicola),1995-2021,195,4.25,strong increase,59,9.67,strong increase,Additional species
-Swallow (Hirundo rustica),1970-2021,-34,-0.81,little change,-35,-8.20,strong decline,Additional species
+Swallow (Hirundo rustica),1970-2021,-34,-0.81,little change,-35,-8.2,strong decline,Additional species
 Swift (Apus apus),1995-2021,-62,-3.68,strong decline,-19,-4.16,strong decline,Additional species
 Whinchat (Saxicola rubetra),1995-2021,-57,-3.17,strong decline,-10,-2.07,weak decline,Additional species
-Woodlark (Lullula arborea),1993-2021,89,2.30,weak increase,17,3.11,strong increase,Additional species
+Woodlark (Lullula arborea),1993-2021,89,2.3,weak increase,17,3.11,strong increase,Additional species
