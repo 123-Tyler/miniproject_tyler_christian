@@ -71,17 +71,54 @@ unique(iNaturalist$scientific_name) # 112 unique species
 merged_data <- merge(gov_data,
                      iNaturalist,
                      by = 'scientific_name',
-                     all = TRUE)
+                     all = TRUE)  %>% 
+  mutate(common_name_gov = 
+           common_name.x,
+         common_name_iNat =
+           common_name.y) %>% 
+  select(!c(common_name.x, common_name.y))
 
 # Species list + what datasets its in:
 
 species_presence <- merged_data %>% 
-  select(scientific_name, common_name.x, common_name.y)
+  select(scientific_name, common_name_gov, common_name_iNat)
 
-sum(is.na(species_presence$common_name.x)) # 335 species missing from iNaturalist data
-sum(is.na(species_presence$common_name.y)) # 137 species missing from gov.uk data
+sum(is.na(species_presence$common_name_gov)) # 335 species missing from iNaturalist data
+sum(is.na(species_presence$common_name_iNat)) # 137 species missing from gov.uk data
 sum(is.na(gov_data$common_name))
 sum(is.na(iNaturalist$common_name)) # no blanks in original datasets, therefore issues with overlap.
 
+species_presence <- species_presence %>% 
+  mutate(present_gov =
+           ifelse(
+             !is.na(common_name_gov),
+             "yes",
+             "no"
+           ),
+         present_iNat =
+           ifelse(
+             !is.na(common_name_iNat),
+             "yes",
+             "no"
+           )) %>% 
+  select(scientific_name, present_gov, present_iNat) %>% 
+  distinct() %>% 
+  mutate(present_both = 
+           ifelse(
+             present_gov == "yes" & present_iNat == "yes",
+             "yes",
+             "no"
+           ))
 
+sum(species_presence$present_both == "yes") # 56 species in both datasets
 
+# creating a final species list
+
+final_species_list <- species_presence %>% 
+  filter(present_both == "yes")
+
+final_species_list <- as.vector(final_species_list$scientific_name)
+
+# removing species from merged data not in both datasets
+
+###(try creating new yes/no column and removing no???)
