@@ -4,6 +4,8 @@
 rm=list(ls())
 
 library(tidyverse)
+library(vegan)
+library(datawizard)
 
 # iNaturalist data tidying ------------------------------------------------
 
@@ -198,12 +200,7 @@ colnames(sp_richness) <- c("location", "richness_official")
 # calculated sp richness via the Frescalo method (Sparta package in R)
 # each location represents an environmental zone (1 km^2)
 
-library(sparta)
-library(vegan)
-library(datawizard)
-
-
-iNat_new <- read.csv("iNaturalist_data_new.csv",
+iNat_new <- read.csv("iNaturalist_data_final.csv",
                      na.strings = "") %>% 
   filter(iconic_taxon_name == "Aves") %>% 
   mutate(year =         # creating a year uploaded column
@@ -214,6 +211,7 @@ iNat_new <- read.csv("iNaturalist_data_new.csv",
            as.factor(year))
 
 iNat_new_sp_count <- iNat_new %>% 
+  filter(year %in% 2000:2013) %>% 
   mutate(scientific_name = as.factor(scientific_name),
          count = 1) %>% 
   group_by(place_county_name, scientific_name) %>% 
@@ -250,14 +248,63 @@ colnames(iNat_new_sp_richness) <- c("location", "richness_iNat")
 species_richness <- merge(iNat_new_sp_richness,
                           sp_richness, 
                           all = TRUE) %>% 
-  pivot_longer(cols = !location, names_to = "dataset", values_to = "species_richness") %>% 
-  drop_na(species_richness)
+  pivot_longer(cols = !location, names_to = "dataset", values_to = "richness") %>% 
+  drop_na(richness) %>% 
+  filter(richness<5) # removes Westminster as extremely high (therefore outlier)
+
+hist(species_richness$richness) # normal distribution
 
 species_richness %>% 
   ggplot(aes(x = dataset, 
-             y = species_richness)) +
+             y = richness)) +
   geom_boxplot()
 
-chisq.test(species_richness$species_richness,species_richness$dataset) 
-# therefore no differences between species richness, iNaturalist is reliable.
+chisq.test(species_richness$richness,species_richness$dataset) 
+# therefore no significant differences between species richness, iNaturalist is reliable.
 
+# Observer accuracy of iNaturalist -----------------------------------------
+
+iNat_edited <- iNat_new %>% 
+  mutate(image_url_present = 
+           ifelse(
+             is.na(image_url),
+             "No",
+             "Yes"
+           ),
+         sound_url_present = 
+           ifelse(
+             is.na(sound_url),
+             "No",
+             "Yes"
+           ),
+         tag_list_present = 
+           ifelse(
+             is.na(tag_list),
+             "No",
+             "Yes"
+           ),
+         description_present = 
+           ifelse(
+             is.na(description),
+             "No",
+             "Yes"
+           ),
+         species_guess_same_common =
+           ifelse(species_guess == common_name,
+                  "Yes",
+                  "no")) %>% 
+  select(!c(
+    observed_on,
+    place_guess:place_county_name,
+    iconic_taxon_name,
+    taxon_id
+  ))
+
+iNat_sample <- iNat_edited %>% 
+  sample_n(100) %>% 
+  mutate(tyler_able_to_ID =
+           "",
+         tyler_ID =
+           "",)
+
+save(iNat_sample,file="sample_data.csv")
