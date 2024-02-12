@@ -183,3 +183,81 @@ gov_data_both <- gov_data_both %>%
 ###########
 ############
 
+
+# new data ----------------------------------------------------------------
+
+# data from 2000-2013
+
+sp_richness <- read.csv("Species_richness_2000.csv") %>% 
+  select(Location, Bird) %>% 
+  drop_na(Bird) %>% 
+  mutate(Bird = standardise(Bird))
+
+colnames(sp_richness) <- c("location", "richness_official")
+
+# calculated sp richness via the Frescalo method (Sparta package in R)
+# each location represents an environmental zone (1 km^2)
+
+library(sparta)
+library(vegan)
+library(datawizard)
+
+
+iNat_new <- read.csv("iNaturalist_data_new.csv",
+                     na.strings = "") %>% 
+  filter(iconic_taxon_name == "Aves") %>% 
+  mutate(year =         # creating a year uploaded column
+           substr(observed_on, 
+                  1,
+                  4),
+         year =
+           as.factor(year))
+
+iNat_new_sp_count <- iNat_new %>% 
+  mutate(scientific_name = as.factor(scientific_name),
+         count = 1) %>% 
+  group_by(place_county_name, scientific_name) %>% 
+  reframe(place_county_name = place_county_name,
+          scientific_name = scientific_name,
+          count = sum(count)) %>% 
+  drop_na(place_county_name) %>% 
+  distinct()
+
+county_area <- read.csv("UK_county_area.csv") %>% 
+  select(ctyua19nm, Shape__Area)
+
+colnames(county_area) <- c("place_county_name", "area")
+
+iNat_new_sp_richness <- merge(iNat_new_sp_count, 
+                              county_area, 
+                              by = "place_county_name", 
+                              all = TRUE) %>% 
+  drop_na(scientific_name) %>% 
+  drop_na(area) %>% 
+  pivot_wider(names_from = scientific_name,
+              values_from = count) %>% 
+  replace(is.na(.), 0) %>% 
+  mutate(total_species = rowSums(.[4:605])) %>% 
+  mutate(richness = standardise(total_species/area)) %>%  # calculate species richness and z-standardise
+  select(c(place_county_name, richness))
+
+colnames(iNat_new_sp_richness) <- c("location", "richness_iNat")
+
+# richness = total species/total area
+
+# Comparing species richness ----------------------------------------------
+
+species_richness <- merge(iNat_new_sp_richness,
+                          sp_richness, 
+                          all = TRUE) %>% 
+  pivot_longer(cols = !location, names_to = "dataset", values_to = "species_richness") %>% 
+  drop_na(species_richness)
+
+species_richness %>% 
+  ggplot(aes(x = dataset, 
+             y = species_richness)) +
+  geom_boxplot()
+
+chisq.test(species_richness$species_richness,species_richness$dataset) 
+# therefore no differences between species richness, iNaturalist is reliable.
+
