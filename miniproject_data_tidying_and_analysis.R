@@ -67,20 +67,17 @@ head(gov_data)
 unique(gov_data$scientific_name) # 161 unique species
 unique(iNaturalist$scientific_name) # 112 unique species
 
-# merging the datasets:
-merged_data <- merge(gov_data,
-                     iNaturalist,
-                     by = 'scientific_name',
-                     all = TRUE)  %>% 
+# Species list + what datasets its in:
+
+species_presence <- merge(gov_data,
+                          iNaturalist,
+                          by = 'scientific_name',
+                          all = TRUE)  %>% 
   mutate(common_name_gov = 
            common_name.x,
          common_name_iNat =
            common_name.y) %>% 
-  select(!c(common_name.x, common_name.y))
-
-# Species list + what datasets its in:
-
-species_presence <- merged_data %>% 
+  select(!c(common_name.x, common_name.y)) %>% 
   select(scientific_name, common_name_gov, common_name_iNat)
 
 sum(is.na(species_presence$common_name_gov)) # 335 species missing from iNaturalist data
@@ -119,6 +116,70 @@ final_species_list <- species_presence %>%
 
 final_species_list <- as.vector(final_species_list$scientific_name)
 
-# removing species from merged data not in both datasets
+# Filtering the original datasets for species present in both:
 
-###(try creating new yes/no column and removing no???)
+iNaturalist_both <- iNaturalist %>% 
+  mutate(present_both =          # filtering for species in both
+           ifelse(scientific_name %in% final_species_list,
+                  "yes",
+                  "no")) %>% 
+  filter(present_both ==
+           "yes") %>% 
+  mutate(year_uploaded =         # creating a year uploaded column
+           substr(observed_on, 
+                  7,
+                  10),
+         year_uploaded =
+           as.factor(year_uploaded)) %>% 
+  select(                        # filtering for useful columns
+    id,
+    user_id,
+    quality_grade,
+    url,
+    image_url,
+    sound_url,
+    tag_list,
+    description,
+    num_identification_agreements,
+    num_identification_disagreements,
+    captive_cultivated,
+    place_guess,
+    longitude,
+    latitude,
+    species_guess,
+    scientific_name,
+    common_name,
+    iconic_taxon_name,
+    taxon_id,
+    year_uploaded
+  )
+
+gov_data_both <- gov_data %>% 
+  mutate(present_both =          # filtering for species in both
+           ifelse(scientific_name %in% final_species_list,
+                  "yes",
+                  "no")) %>% 
+  filter(present_both == "yes") 
+
+# calculating % change in iNaturalist -------------------------------------
+
+unique(iNaturalist_both$year_uploaded)
+plot(iNaturalist_both$year_uploaded)  # dates from 1988 to 2023
+# gov_data has two categories (1970-2021 and 2016-2021), therefore only calculate short-term % change.
+
+length(iNaturalist_both)/length(unique(iNaturalist_both$scientific_name)) # not many repeated observations of species
+
+gov_data_both <- gov_data_both %>% 
+  select(!c(long_term_time_period:long_term_trend)) # remove long term data as dates don't match iNaturalist
+
+
+
+###########
+###########
+#########
+##########
+##########
+###########
+###########
+############
+
