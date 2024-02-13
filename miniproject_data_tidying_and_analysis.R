@@ -37,6 +37,18 @@ head(gov_data)
 
 # iNaturalist data tidying ------------------------------------------------
 
+iNat_new <- read.csv("iNaturalist_data.csv",
+                     na.strings = "") %>% 
+  filter(iconic_taxon_name == "Aves") %>% 
+  mutate(year =         # creating a year uploaded column
+           substr(observed_on, 
+                  1,
+                  4),
+         year =
+           as.factor(year))
+
+# Species richness data ---------------------------------------------------
+
 # (data from 2000-2013)
 
 sp_richness <- read.csv("Species_richness_2000.csv") %>% 
@@ -48,16 +60,6 @@ colnames(sp_richness) <- c("location", "richness_official")
 
 # calculated sp richness via the Frescalo method (Sparta package in R)
 # each location represents an environmental zone (1 km^2)
-
-iNat_new <- read.csv("iNaturalist_data_final.csv",
-                     na.strings = "") %>% 
-  filter(iconic_taxon_name == "Aves") %>% 
-  mutate(year =         # creating a year uploaded column
-           substr(observed_on, 
-                  1,
-                  4),
-         year =
-           as.factor(year))
 
 iNat_new_sp_count <- iNat_new %>% 
   filter(year %in% 2000:2013) %>% 
@@ -99,7 +101,7 @@ species_richness <- merge(iNat_new_sp_richness,
                           all = TRUE) %>% 
   pivot_longer(cols = !location, names_to = "dataset", values_to = "richness") %>% 
   drop_na(richness) %>% 
-  filter(richness<5) # removes Westminster as extremely high (therefore outlier)
+  filter(richness < 5) # removes Westminster as extremely high (therefore outlier)
 
 hist(species_richness$richness) # normal distribution
 
@@ -154,17 +156,41 @@ iNat_edited <- iNat_new %>%
            as.factor(taxon_id),
          taxon_family_name = 
            as.factor(taxon_family_name)) %>% 
-  select(!c(
-    observed_on,
-    iconic_taxon_name,
-    taxon_id
-  ))
+  select(!observed_on)
+
+user_obervations <- iNat_edited %>% 
+  select(user_id) %>% 
+  mutate(total_id = 
+           1) %>%
+  group_by(user_id) %>% 
+  reframe(user_id = 
+            user_id,
+            total_id = 
+            sum(total_id)) %>% 
+  distinct()
+
+iNat_edited <- merge(iNat_edited, user_obervations, all = TRUE)
+
+# GLM ---------------------------------------------------------------------
+
+
+# Sample data to test -----------------------------------------------------
 
 iNat_sample <- iNat_edited %>% 
   sample_n(100) %>% 
-  mutate(tyler_able_to_ID =
+  mutate(tyler_ID =
            "",
-         tyler_ID =
-           "",)
+         tyler_confidence =
+           "")
 
-save(iNat_sample,file="sample_data.csv")
+write.csv(iNat_sample, file = "sample_data.csv")
+
+# Plots -------------------------------------------------------------------
+
+
+### to do:
+# use new data
+# ID random sample of 100
+# create accuracy quantifier
+# test quantifier against my IDs
+# model change in accuracy over time (+ location???)
