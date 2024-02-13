@@ -115,33 +115,47 @@ chisq.test(species_richness$richness,species_richness$dataset)
 
 # Observer accuracy of iNaturalist -----------------------------------------
 
+# 0 = No, 1 = Yes
+
 iNat_edited <- iNat_new %>% 
   mutate(image_url_present = 
            ifelse(
              is.na(image_url),
-             "No",
-             "Yes"
+             0,
+             1
            ),
          sound_url_present = 
            ifelse(
              is.na(sound_url),
-             "No",
-             "Yes"
+             0,
+             1
            ),
          description_present = 
            ifelse(
              is.na(description),
-             "No",
-             "Yes"
+             0,
+             1
            ),
          species_guess_same_common =
            ifelse(species_guess == common_name,
-                  "Yes",
-                  "no"),
+                  1,
+                  0),
+         has_coordinates = 
+           ifelse(
+             is.na(longitude),
+                  0,
+                  ifelse(
+                    is.na(latitude),
+                    0,
+                    1
+                  )
+             ),
          id = 
            as.factor(id),
          user_id =
            as.factor(user_id),
+         year = 
+           as.factor(year),
          quality_grade = 
            as.factor(quality_grade),
          species_guess = 
@@ -155,7 +169,11 @@ iNat_edited <- iNat_new %>%
          taxon_id = 
            as.factor(taxon_id),
          taxon_family_name = 
-           as.factor(taxon_family_name)) %>% 
+           as.factor(taxon_family_name),
+         place_county_name =
+           as.factor(place_county_name),
+         captive_cultivated =
+           as.factor(captive_cultivated)) %>% 
   select(!observed_on)
 
 user_obervations <- iNat_edited %>% 
@@ -171,21 +189,46 @@ user_obervations <- iNat_edited %>%
 
 iNat_edited <- merge(iNat_edited, user_obervations, all = TRUE)
 
-# GLM ---------------------------------------------------------------------
-
+str(iNat_edited)
 
 # Sample data to test -----------------------------------------------------
 
-iNat_sample <- iNat_edited %>% 
-  sample_n(100) %>% 
+summary(iNat_edited$quality_grade)
+
+iNat_sample_needs_id <- iNat_edited %>% 
+  filter(quality_grade == "needs_id") %>% 
+  sample_n(40) # boosted slightly to provide decant sample size
+
+iNat_sample_casual <- iNat_edited %>% 
+  filter(quality_grade == "casual") %>% 
+  sample_n(40)
+
+iNat_sample_research <- iNat_edited %>% 
+  filter(quality_grade == "research") %>% 
+  sample_n(40)
+
+iNat_sample <- rbind(
+  iNat_sample_needs_id,
+  iNat_sample_casual, 
+  iNat_sample_research) %>%
   mutate(tyler_ID =
            "",
          tyler_confidence =
+           "",
+         tyler_comment =
            "")
 
-write.csv(iNat_sample, file = "sample_data.csv")
+# write.csv(iNat_sample, file = "sample_data.csv")
+
+iNat_sample_commented <- read.csv("sample_data_with_comments.csv")
+
+str(iNat_sample_commented)
+
+# GLM ---------------------------------------------------------------------
+
 
 # Plots -------------------------------------------------------------------
+
 
 
 ### to do:
