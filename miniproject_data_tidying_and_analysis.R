@@ -12,6 +12,16 @@ library(lme4)
 library(nnet)
 library(lmtest)
 library(sjPlot)
+library(patchwork)
+
+
+# Data references ---------------------------------------------------------
+
+# Dyer, R. and Oliver, T. (2016). Estimated species richness data used in study of UK Ecological status. NERC Environmental Information Data Centre. https://doi.org/10.5285/6c535793-034d-4c4f-8a00-497315e7d689
+
+# ONS Geography (2019). Counties and Unitary Authorities (December 2019) Boundaries UK BUC. Office For National Statistics. https://geoportal.statistics.gov.uk/datasets/bbf13c40ca8f4931afc0a46d079af58c_0/about 
+
+# iNaturalist community (2024). Observations of birds from UK observed between 01/01/2000 - 01/01/2021. iNaturalist. https://www.inaturalist.org
 
 # gov.uk data tidying -----------------------------------------------------
 
@@ -48,8 +58,8 @@ iNat_new <- read.csv("iNaturalist_data.csv",
   filter(iconic_taxon_name == "Aves") %>%
   mutate(year =         # creating a year uploaded column
            substr(observed_on,
-                  1,
-                  4),
+                  7,
+                  10),
          year =
            as.factor(year))
 
@@ -241,15 +251,15 @@ iNat_accuracy <- iNat_sample_commented %>%
   ) %>%
   distinct()
 
-iNat_edited <- merge(iNat_edited, iNat_accuracy, all = TRUE)
+iNat_final <- merge(iNat_edited, iNat_accuracy, all = TRUE)
 
-str(iNat_edited)
+str(iNat_final)
 
-unique(iNat_edited$species_guess_same_common) # some NA's.
+unique(iNat_final$species_guess_same_common) # some NA's.
 
-iNat_edited$species_guess_same_common[is.na(iNat_edited$species_guess_same_common)] <- 0
+iNat_final$species_guess_same_common[is.na(iNat_final$species_guess_same_common)] <- 0
 
-iNat_edited <- iNat_edited %>% 
+iNat_final <- iNat_final %>% 
   mutate(agreement_rate =
            num_identification_agreements / (num_identification_agreements+num_identification_disagreements),
          agreement_rate =
@@ -269,7 +279,7 @@ model_1 <- lmer(
     species_guess_same_common +
     total_id +
     (1 | place_county_name / year),
-  data = iNat_edited)
+  data = iNat_final)
 
 summary(model_1) # needs to be z-standardised
 
@@ -283,7 +293,7 @@ model_2 <- lmer(
     species_guess_same_common +
     standardise(total_id) +
     (1 | place_county_name / year),
-  data = iNat_edited)
+  data = iNat_final)
 
 summary(model_2) # try crossed random
 
@@ -298,7 +308,7 @@ model_3 <- lmer(
     standardise(total_id) +
     (1 | year) +
     (1 | place_county_name),
-  data = iNat_edited)
+  data = iNat_final)
 
 summary(model_3)
 
@@ -314,7 +324,7 @@ model_4 <- lmer(
     species_guess_same_common +
     standardise(total_id) +
     (1 | place_county_name / year),
-  data = iNat_edited)
+  data = iNat_final)
 
 summary(model_4)
 
@@ -335,7 +345,7 @@ model_5 <- lmer(
     species_guess_same_common +
     standardise(total_id) +
     (1 | place_county_name / year),
-  data = iNat_edited)
+  data = iNat_final)
 
 lrtest(model_2, model_5) # model 2 is still best
 
@@ -347,40 +357,72 @@ plot_model(model_2,
 
 # Plots -------------------------------------------------------------------
 
-year_plot <- iNat_edited %>% 
+year_data <- iNat_final %>% 
   group_by(year, quality_grade, percentage_correct) %>% 
   count(quality_grade) %>%    # total of each quality_grade per year
-  group_by(year) %>% 
+  group_by(year) 
+
+str(year_data)
+
+# missing needs_id for 2000 and 2001, add these manually with values of 0:
+
+year_data[nrow(year_data) + 1,] <- list("2000",   # year is quoted because it is a factor
+                                        "needs_id",
+                                        0.225,
+                                        0)
+
+year_data[nrow(year_data) + 1,] <- list("2001",
+                                        "needs_id",
+                                        0.225, 
+                                        0)
+
+sum(year_data$n)
+
+year_data <- year_data %>% 
   mutate(standerdised_quality_per_year =
-           n*percentage_correct/sum(n*percentage_correct)) %>% 
+           n*percentage_correct/122799) %>% 
   mutate(quality_grade =
-           as.factor(quality_grade)) %>% 
+           as.factor(quality_grade),
+         quality_grade = 
+           gsub("casual", 
+                "Casual", 
+                quality_grade),
+         quality_grade = 
+           gsub("needs_id", 
+                "Needs ID", 
+                quality_grade),
+         quality_grade = 
+           gsub("research", 
+                "Research", 
+                quality_grade)
+         )
+
+year_plot <- year_data %>% 
   ggplot(aes(x = year,
              y = standerdised_quality_per_year,
              group = quality_grade,
              color = quality_grade)) +
   geom_point() +
-  geom_smooth(linewidth = 0.1)
+  geom_smooth(linewidth = 0.1,
+              method = "gam") +
+  geom_label(
+    label = "                                                     Total Observations x Accuracy
+    Standardised Anual Quality = -------------------------------------------
+                                                    Total Observations", 
+    x = 7,
+    y = 0.3,
+    label.padding = unit(0.55, 
+                         "lines"), # Rectangle size around label
+    label.size = 0.35,
+    size = 2.5,
+    color = "black",
+    fill="white"
+  ) +
+  ylab("Standardised Anual Quality") +
+  xlab("Year") +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(title = "Quality Grade:")) 
 
-year_plot # why does casual not show up???
-
-
-location_plot <- iNat_edited %>% 
-  group_by(place_county_name, quality_grade) %>% # maybe do overall accuracy, not quality grade?
-  count(quality_grade) %>% 
-  ggplot(aes(x = place_county_name,
-             y = n)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  coord_flip()
-
-location_plot
-
-### to do:
-# plots
-# add comments + tidy code
-
-
-
-# GIS ---------------------------------------------------------------------
-
+year_plot 
 

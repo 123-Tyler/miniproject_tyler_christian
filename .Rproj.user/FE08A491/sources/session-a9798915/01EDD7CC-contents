@@ -1,0 +1,169 @@
+setwd("C:/Users/fishm/OneDrive/Documents/MSc Ecology, Conservation & Evolution/Week 6 - Landscape Ecology/Data for practical")
+
+library(terra)
+library(sf)
+library(landscapemetrics)
+library(vegan)
+library(ggplot2)
+
+sites <- read.csv("sites.csv", header = TRUE)
+sites <- st_as_sf(sites, coords=c('Lon','Lat'), crs=4326)
+plot(sites[c('Landscape_ID')], key.pos=4, axes=TRUE)
+str(sites)
+
+# Load the abundance data and use the first column (site names) as row names
+abundance <- read.csv("abundance.csv", row.names=1, stringsAsFactors = FALSE)
+dim(abundance)
+
+View(sites)
+View(abundance)
+any(is.na(sites))
+any(is.na(abundance))
+
+# load map
+landcover <- rast("map.tif")
+print(landcover)
+
+plot(landcover)
+plot(sites[c('Landscape_ID')], add = TRUE)
+
+inMemory(landcover)
+
+# Get the bounding box and convert to a polygon
+sites_region <- st_as_sfc(st_bbox(sites))
+
+# Buffer the region by 0.1 degrees to get coverage around the landscape.
+# This is roughly 10 kilometres which is a wide enough border to allow
+# us to test the scale of effects.
+sites_region <- st_buffer(sites_region, 0.1)
+
+# Crop the landcover data and convert to a binary forest map
+sites_landcover <- crop(landcover, sites_region)
+sites_forest <- sites_landcover == 3
+print(sites_forest)
+
+sites_utm23S <- st_transform(sites, 32723)
+# This takes a little while to run!
+sites_forest_utm23S <- project(sites_forest, "epsg:32723", res=30, method='near')
+
+plot(sites_forest_utm23S)
+plot(st_geometry(sites_utm23S), add=TRUE)
+
+lsm_abbreviations_names
+
+# Calculate patch areas at patch, class and landscape scale.
+lsm <- sample_lsm(sites_forest_utm23S, sites_utm23S, 
+                  shape = "circle", size = 600, 
+                  plot_id = sites_utm23S$Site, 
+                  what = c('lsm_p_area',
+                           'lsm_c_np', 'lsm_l_np', 
+                           'lsm_c_area_mn', 'lsm_l_area_mn',
+                           'lsm_c_pland'))
+
+# Use Alce as an example
+alce <- subset(lsm, plot_id=='Alce')
+print(alce, n=23)
+# Calculate total area
+sum(alce$value[alce$metric == 'area'])
+
+# Weighted average of class patch sizes (with some rounding error)
+(19.0 * 4 + 3.38 * 11) / 15
+
+# Drop the patch data and landscape rows
+lsm_forest <- subset(lsm, level == 'class')
+# Drop down to the forest class and also reduce to the three core fields
+lsm_forest <- subset(lsm_forest, class == 1, select=c(metric, value, plot_id))
+
+# Rename the value field so that - when combined with the metric
+# name - the local landscape details are recorded
+names(lsm_forest)[2] <- 'C600'
+
+# Reshape that dataset so that each metric has its own column
+lsm_forest <- reshape(data.frame(lsm_forest), direction='wide', 
+                      timevar='metric', idvar='plot_id')
+head(lsm_forest, n=10)
+
+sites <- merge(sites, lsm_forest, by.x='Site', by.y='plot_id')
+
+# First, we sort the rows of abundance to make sure that they are in the
+# same order as the sites data frame.
+site_order <- match(rownames(abundance), sites$Site)
+abundance <- abundance[site_order, ]
+
+# Now we can store diversity metrics values in the sites data frame
+sites$total_abundance <- rowSums(abundance)
+sites$richness <- specnumber(abundance)
+sites$Srar <- rarefy(abundance, min(sites$total_abundance))
+sites$H <- diversity(abundance, index='shannon')
+# Pielou's evenness
+sites$J <- sites$H / log(sites$richness)
+
+# Some example code to modify:
+cor(sites$richness, sites$total_abundance)
+plot(richness ~ total_abundance, data=sites)
+
+# Get the total abundance of each _species_
+species_abund <- colSums(abundance)
+# Transform into relative percent abundance
+species_abund_perc <- species_abund / sum(species_abund) * 100
+# Plot from most to least abundant
+plot(sort(species_abund_perc, decreasing = TRUE))
+
+bray  <- vegdist(abundance, method="bray", binary=FALSE)
+
+bray_r <- rast(as.matrix(bray))
+plot(bray_r, col=hcl.colors(20))
+
+pcoa <- cmdscale(bray, k=8, eig=TRUE)
+
+# Extract the scores 
+pcoa_axes <- pcoa$points
+colnames(pcoa_axes) <- paste0('bray_raw_pcoa_', 1:8)
+
+zapsmall(cor(pcoa_axes), digits=10)
+
+# Convert the pcoa axis values to a data frame and label by site
+pcoa_axes_df <- data.frame(pcoa_axes)
+pcoa_axes_df$Site <- rownames(pcoa_axes)
+# Merge onto the sites data - the PCoA axes get the labels X1 to X8
+sites <- merge(sites, pcoa_axes_df, by='Site')
+
+ggplot(sites, aes(bray_raw_pcoa_1, bray_raw_pcoa_2)) +
+  geom_point(aes(colour = C600.pland)) + 
+  scale_colour_gradientn(colors=hcl.colors(20)) + 
+  theme_classic() 
+
+par(mfrow=c(1,2))
+eig <- pcoa$eig[pcoa$eig >0] 
+barplot(eig / sum(eig), main='Axis variation')
+barplot(cumsum(eig)/ sum(eig), main='Cumulative variation')
+
+# Print the percentage variation of the first 8 
+head(sprintf('%0.2f%%', (eig / sum(eig)) * 100), n=8)
+
+# Model community composition as a function of forest cover
+mod_fc <- lm(bray_raw_pcoa_1 ~ C600.pland, data=sites)
+summary(mod_fc)
+# Plot the model
+plot(bray_raw_pcoa_1 ~ C600.pland, data=sites)
+abline(mod_fc, col='red')
+
+traits <- read.csv("bird_traits.csv", stringsAsFactors = FALSE)
+str(traits)
+
+# Get a data frame holding only trait values, with rownames 
+traits_only <- subset(traits, select=-Species)
+rownames(traits_only) <- traits$Species
+
+# Calculate the trait distance matrix
+trait_dist <- taxa2dist(traits_only, varstep=TRUE)
+
+# And get a trait dendrogram
+trait_tree <- hclust(trait_dist, "aver")
+plot(trait_tree, hang=-1, cex=0.3)
+
+trait_diversity <- treedive(abundance, trait_tree)
+trait_diversity <- data.frame(Site=names(trait_diversity),
+                              trait_diversity=trait_diversity)
+sites <- merge(sites, trait_diversity)
+
