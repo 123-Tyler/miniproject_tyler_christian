@@ -6,12 +6,17 @@
 
 rm = list(ls())
 
-# required packages:
-library(tidyverse) # data tidying + ggplot
-library(datawizard) # z-standardize function
-library(lme4) # linear mixed models
-library(lmtest) # comparing linear mixed models
-library(sjPlot) # creates results table+plot for models
+library(tidyverse)
+library(vegan)
+library(datawizard)
+library(psych)
+library(usdm)
+library(lme4)
+library(nnet)
+library(lmtest)
+library(sjPlot)
+library(wesanderson)
+
 
 # Data references ---------------------------------------------------------
 
@@ -234,7 +239,7 @@ iNat_sample_commented <-
            ifelse(tyler_ID == scientific_name, # making binomial (i.e. did my ID match the original)
                   1,
                   0)
-  )
+         )
 
 str(iNat_sample_commented)
 
@@ -405,11 +410,11 @@ year_data <- year_data %>%
            gsub("research", 
                 "Research", 
                 quality_grade)
-  )
+         )
 
 colour_scheme <- c("forestgreen", # setting a colour scheme for the graph
-                   "firebrick1",
-                   "royalblue3")
+                  "firebrick1",
+                  "royalblue3")
 
 year_plot <- year_data %>%
   group_by(quality_grade) %>% 
@@ -438,7 +443,7 @@ year_plot <- year_data %>%
   xlab("Year") +
   guides(color =   # changes legend title
            guide_legend(title = 
-                          "Quality Grade:")) + 
+                                "Quality Grade:")) + 
   scale_color_manual(values =   # changes line and point colours
                        colour_scheme) +
   theme_bw() + 
@@ -450,5 +455,6 @@ year_plot # final plot
 
 ggsave("final_plot.jpeg", # saves the final plot as .jpeg
        width = 15.92, # setting the plot size to fit into Microsoft Word without editing
-       height = 12,
+       height = 15,
        units = "cm")
+
