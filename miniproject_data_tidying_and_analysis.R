@@ -6,16 +6,12 @@
 
 rm = list(ls())
 
-library(tidyverse)
-library(vegan)
-library(datawizard)
-library(psych)
-library(usdm)
-library(lme4)
-library(nnet)
-library(lmtest)
-library(sjPlot)
-library(wesanderson)
+# required packages:
+library(tidyverse) # data tidying + ggplot
+library(datawizard) # z-standardize function
+library(lme4) # linear mixed models
+library(lmtest) # comparing linear mixed models
+library(sjPlot) # creates results table+plot for models
 
 # Data references ---------------------------------------------------------
 
@@ -454,5 +450,5 @@ year_plot # final plot
 
 ggsave("final_plot.jpeg", # saves the final plot as .jpeg
        width = 15.92, # setting the plot size to fit into Microsoft Word without editing
-       height = 15,
+       height = 12,
        units = "cm")
