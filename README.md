@@ -2,7 +2,17 @@
 
 ## Files:
 
+**miniproject_code_tyler_christian**
 
+Code for data tidying, analysis, and visualisation
+
+**miniproject_writeup_tyler_christian**
+
+The final paper and reflection.
+
+**final_plot.jpeg**
+
+Plot to be inserted into the paper.
 
 **Species_richness_2000.csv**
 
@@ -18,12 +28,8 @@ iNaturalist community (2024). Observations of birds from UK observed between 01/
 
 **sample_data.csv**
 
-Random sample of identifications (see code)
+Random sample of identifications (see code).
 
 **sample_data_with_comments.csv**
 
 Random sample of observations containing identifications using the Collins Bird ID guide and additional comments.
-
-**final_plot.jpeg**
-
-Plot to be inserted into the paper.
