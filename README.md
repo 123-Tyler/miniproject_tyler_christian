@@ -10,6 +10,10 @@ Code for data tidying, analysis, and visualisation
 
 The final paper and reflection.
 
+**miniproject_presentation_tyler_christian**
+
+PowerPoint for friday's presentation.
+
 **final_plot.jpeg**
 
 Plot to be inserted into the paper.
