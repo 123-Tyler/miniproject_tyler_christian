@@ -107,7 +107,7 @@ species_richness <- merge(iNat_new_sp_richness,
                names_to = "dataset",
                values_to = "richness") %>%
   drop_na(richness) %>%
-  filter(richness < 5) # removes Westminster (iNaturalist) as extremely high (therefore outlier)
+  filter(richness < 5) # removes Westminster from iNaturalist as extremely high (therefore outlier)
 
 hist(species_richness$richness) # normal distribution
 
@@ -254,7 +254,7 @@ iNat_accuracy <- iNat_sample_commented %>%
 # Needs ID: 22.5%
 # Research: 97.5%
 
-iNat_final <- merge(iNat_edited, # adding the success rate into the origional data
+iNat_final <- merge(iNat_edited, # adding the success rate into the original data
                     iNat_accuracy, 
                     all = TRUE)
 
@@ -309,11 +309,11 @@ summary(model_1) # Therfore needs to be z-standardized as some variables are of 
 model_2 <- lmer(
   percentage_correct ~
     standardise(agreement_rate) + 
+    species_guess_same_common +
+    standardise(total_id) +
     image_url_present *
     sound_url_present * 
     description_present +
-    species_guess_same_common +
-    standardise(total_id) +
     (1 | year) +
     (1 | place_county_name),
   data = iNat_final)
@@ -361,16 +361,24 @@ tab_model(model_2)
 
 plot_model(model_2, 
            show.values = TRUE, # Displays estimate values above lines
-           show.p = TRUE) # Displays p-values as stars
+           show.p = TRUE) + # Displays p-values as stars
+  theme_bw() 
 
 # Plots -------------------------------------------------------------------
 
 year_data <- iNat_final %>% 
   group_by(year,
            quality_grade,
-           percentage_correct) %>% 
+           percentage_correct,
+           agreement_rate) %>% 
   count(quality_grade) %>%    # total of each quality_grade per year
-  group_by(year) 
+  group_by(year, quality_grade) %>% 
+  reframe(year = year,
+          quality_grade = quality_grade,
+          percentage_correct = percentage_correct,
+          agreement_rate = mean(agreement_rate),
+          n = mean(n)) %>% 
+  distinct()
 
 str(year_data)
 
@@ -379,18 +387,20 @@ str(year_data)
 year_data[nrow(year_data) + 1,] <- list("2000",   # year is quoted because it is a factor
                                         "needs_id",
                                         0.225,
+                                        0, # assumed aggreement rate and n to be 0 due to lack of data
                                         0)
 
 year_data[nrow(year_data) + 1,] <- list("2001",
                                         "needs_id",
                                         0.225, 
+                                        0,
                                         0)
 
 total_observations <- sum(year_data$n) # total number of observations
 
 year_data <- year_data %>% 
   mutate(standerdised_quality_per_year = # proportion of accurate observations divided by the total (per year, per quality grade)
-           n*percentage_correct/total_observations) %>% 
+           (n*percentage_correct*agreement_rate)/total_observations) %>% 
   mutate(quality_grade =
            as.factor(quality_grade),
          quality_grade =  # nicer-looking variable names for plot
@@ -421,16 +431,24 @@ year_plot <- year_data %>%
   geom_smooth(linewidth = 0.1,
               method = "gam",  # provides the best fit (practically exponential)
               fill = "lightgrey") +
+  geom_vline(xintercept = 9, 
+             linetype = "dashed", 
+             color = "black",
+             linewidth = 0.5) +
+  geom_vline(xintercept = 17, 
+             linetype = "dashed", 
+             color = "black",
+             linewidth = 0.5) +
   geom_label(  # Writes the equation for standardized quality on the graph
-    label = "                                                     Total Observations x Accuracy
-    Standardised Anual Quality = -------------------------------------------
-                                                    Total Observations", 
-    x = 6.5, # postition of the label
-    y = 1,
+    label = "                                                 Total Observations x Accuracy x Proportion Identification Agreements
+Standardised Anual Quality = --------------------------------------------------------------------------------------------
+                                                    Total Observations",
+    x = 7.5, # position of the label
+    y = 0.125,
     label.padding = unit(0.55, 
                          "lines"), # Rectangle size around label
     label.size = 0.35,
-    size = 2.5,
+    size = 2,
     color = "black",
     fill = "white"
   ) +
@@ -450,5 +468,6 @@ year_plot # final plot
 
 ggsave("final_plot.jpeg", # saves the final plot as .jpeg
        width = 15.92, # setting the plot size to fit into Microsoft Word without editing
-       height = 12,
+       height = 11,
        units = "cm")
+
