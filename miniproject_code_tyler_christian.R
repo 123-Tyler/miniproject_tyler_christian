@@ -107,14 +107,30 @@ species_richness <- merge(iNat_new_sp_richness,
                names_to = "dataset",
                values_to = "richness") %>%
   drop_na(richness) %>%
-  filter(richness < 5) # removes Westminster from iNaturalist as extremely high (therefore outlier)
+  filter(richness < 5) %>%   # removes Westminster from iNaturalist as extremely high (therefore outlier)
+  mutate(dataset =
+           gsub("richness_iNat",
+                "iNaturalist",
+                dataset),
+         dataset =
+           gsub("richness_official",
+               "Official",
+               dataset))
 
 hist(species_richness$richness) # normal distribution
 
 species_richness %>%
   ggplot(aes(x = dataset,
              y = richness)) +
-  geom_boxplot()
+  geom_boxplot() +
+  ylab("Species Richness (z-standardised)") +
+  xlab("Data") +
+  theme_bw()
+
+ggsave("chi_squared_plot.jpeg", # saves the final plot as .jpeg
+       width = 18,
+       height = 18,
+       units = "cm")
 
 summary(species_richness$richness[species_richness$dataset == "richness_iNat"])
 summary(species_richness$richness[species_richness$dataset == "richness_official"])
@@ -362,7 +378,22 @@ tab_model(model_2)
 plot_model(model_2, 
            show.values = TRUE, # Displays estimate values above lines
            show.p = TRUE) + # Displays p-values as stars
-  theme_bw() 
+  theme_bw()
+
+# Editing the plot to be inserted into ppt:
+plot_model(model_2, 
+           show.values = TRUE,
+           show.p = TRUE) + 
+  theme_sjplot2() +
+  theme(axis.text.y =   # the plot will be cropped and axis re-written to match ppt's design.
+          element_blank(),
+        plot.title =
+          element_blank())
+
+ggsave("model_plot.jpeg", # saves the final plot as .jpeg
+       width = 20,
+       height = 13,
+       units = "cm")
 
 # Plots -------------------------------------------------------------------
 
@@ -441,7 +472,7 @@ year_plot <- year_data %>%
              linewidth = 0.5) +
   geom_label(  # Writes the equation for standardized quality on the graph
     label = "                                                 Total Observations x Accuracy x Proportion Identification Agreements
-Standardised Anual Quality = --------------------------------------------------------------------------------------------
+Standardised Annual Quality = --------------------------------------------------------------------------------------------
                                                     Total Observations",
     x = 7.5, # position of the label
     y = 0.125,
@@ -452,7 +483,7 @@ Standardised Anual Quality = ---------------------------------------------------
     color = "black",
     fill = "white"
   ) +
-  ylab("Standardised Anual Quality") +
+  ylab("Standardised Annual Quality") +
   xlab("Year") +
   guides(color =   # changes legend title
            guide_legend(title = 
@@ -466,8 +497,7 @@ Standardised Anual Quality = ---------------------------------------------------
                                    hjust = 1))
 year_plot # final plot
 
-ggsave("final_plot.jpeg", # saves the final plot as .jpeg
+ggsave("year_plot.jpeg", # saves the final plot as .jpeg
        width = 15.92, # setting the plot size to fit into Microsoft Word without editing
-       height = 11,
+       height = 12,
        units = "cm")
-
